@@ -1,4 +1,5 @@
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -8,6 +9,17 @@ export default function Home() {
           Kanxa is crazy!
         </p>
       </div>
+
+      <h1 className="max-w-4xl text-6xl font-bold lg:text-7xl">
+        Read, chat and take note from your <span className="text-orange-500"> Documents & Papers </span> while you blink
+      </h1>
+      <p className="mt-6 max-w-prose text-zinc-700 sm:text-lg font-semibold">
+        Access your personal AI Research Assistant. Have conversation. Take note. Customize as you want. Just get Started
+      </p>
+
+      <Link to ="/dashboard">
+      </Link>
+
    </MaxWidthWrapper> 
   )
 }
