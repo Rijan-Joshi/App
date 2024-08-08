@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,16 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className="light">
+     <html lang="en" className="light">
         <body className={cn(
-          'min-h-screen font-sans antialiased grainy',
+          'min-h-screen font-sans antialiased',
           inter.className
         )}>
           <NavBar/>
           {children}
         </body>
       </html>
-    </ClerkProvider>
   );
 }
