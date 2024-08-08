@@ -1,7 +1,13 @@
-import { useRouter } from "next/dist/client/router"
+'use client'
+import { useRouter, useSearchParams } from "next/navigation"
 
 const Page = () =>{
     const router = useRouter()
+
+    const searchParams = useSearchParams()
+    const origin = searchParams.get('origin')
+
+    console.log(origin)
 }
 
 export default Page
