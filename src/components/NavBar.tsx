@@ -16,7 +16,7 @@ const NavBar = (props: Props) => {
                     Kan<span className='text-orange-500'>x</span>a
                   </Link>
 
-                  <div className='sm:flex items-center'>
+                  <div className='sm:flex items-center space-x-3.5'>
                     <Link
                       href ="/pricing"
                       className={buttonVariants({
@@ -27,19 +27,16 @@ const NavBar = (props: Props) => {
                       Pricing
                     </Link>
                       
-                    <SignInButton>
-                      <Button 
+                      <LoginLink 
                         className={buttonVariants({
                           size:"sm",
                           variant:'ghost'
                         })}
                       >
                         Sign In
-                      </Button>
-                    </SignInButton>
-                      
-                    <SignUpButton>
-                      <Button 
+                      </LoginLink>
+
+                      <RegisterLink 
                         className={buttonVariants({
                           size:"sm",
                           variant:'ghost',
@@ -48,8 +45,8 @@ const NavBar = (props: Props) => {
                       >
                         Get Started
                         <ArrowRight className=''/>
-                      </Button>
-                    </SignUpButton>
+                      </RegisterLink>
+                    
                   </div>
                   
               </div>
