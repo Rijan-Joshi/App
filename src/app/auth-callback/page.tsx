@@ -1,5 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation"
+import { trpc } from "../_trpc/client"
 
 const Page = () =>{
     const router = useRouter()
@@ -7,7 +8,15 @@ const Page = () =>{
     const searchParams = useSearchParams()
     const origin = searchParams.get('origin')
 
-    console.log(origin)
+    const {data, isLoading} = trpc.authCallback.useQuery(undefined, {
+        onSuccess: ({success}) =>{
+            if(success){
+
+                //User is synced
+                router.push(origin ? `${origin}` : "/dashboard")
+            }
+        }
+    })
 }
 
 export default Page
