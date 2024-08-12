@@ -7,6 +7,8 @@ const Dashboard = () => {
         <h1 className="font-semibold text-4xl text-gray-500">My Files</h1>
         <UploadButton />
       </div>
+
+      {/* All user files */}
     </main>
   );
 };

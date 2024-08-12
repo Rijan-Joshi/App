@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -8,17 +10,20 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button, buttonVariants } from "./ui/button";
+import { useState } from "react";
 
 const UploadButton = () => {
+  const [open, setIsOpen] = useState<boolean>(false);
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger onClick={() => setIsOpen(true)} asChild>
         <Button
           className={buttonVariants({
             size: "lg",
           })}
         >
-          Get Here
+          Upload Pdf
         </Button>
       </DialogTrigger>
 
