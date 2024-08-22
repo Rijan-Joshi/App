@@ -1,34 +1,100 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import {router, publicProcedure} from "./trpc";
+import {router, publicProcedure, privateProcedure} from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { db } from "@/db";
+import {z} from "zod"
 
 export const appRouter = router({
+<<<<<<< HEAD
+    authCallback: publicProcedure.query(async () => {
+      const { getUser } = getKindeServerSession()
+      const user = await getUser();
+=======
+
+    
     authCallback: publicProcedure.query(async()=> {
         const {getUser} = getKindeServerSession()
         const user = await getUser()
+>>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
 
-        if(!user.id || !user.email)
-            throw new TRPCError({code:"UNAUTHORIZED"})
+        if (!user || !user.id)
+          throw new TRPCError({ code: 'UNAUTHORIZED' });
 
-        // Check if the user is in the database
+        // check if the user is in the database
         const dbUser = await db.user.findFirst({
-            where:{
-                id: user.id
-            }
+          where: {
+            id: user.id,
+            email: user.email
+          },
         })
         
-        if(!dbUser){
-            //Create new user in database
-            await db.user.create({
-                data:{
-                    id: user.id,
-                    email: user.email
-                }
-            })
+
+        if (!dbUser) {
+          // create user in db
+          await db.user.create({
+            data: {
+              id: user.id,
+              email: user.email
+            },
+          })
         }
-        return {success: true}
+    
+        return { success: true }
+       
+    }),
+    getUserFiles: privateProcedure.query(async({ ctx })=>{
+        const {userId} = ctx
+
+        //Find files in the database by userId and return them
+        return await db.file.findMany({
+            where:{
+                userId,
+            }
+        })
+
+    }),
+<<<<<<< HEAD
+    getFile: privateProcedure
+            .input(z.object({key: z.string()}))
+            .mutation(async({ctx, input})=>{
+                const {userId} = ctx
+        
+                const file = await db.file.findFirst({
+                      where:{
+                      key: input.key,
+                      userId,
+                 }
+        })
+
+        if(!file) throw new TRPCError({code: 'NOT_FOUND'})
+
+        return file
+    })
+    ,
+=======
+>>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
+    deleteFile: privateProcedure.input(
+        z.object({id: z.string()})
+    ).mutation( async({ctx, input})=>{
+        const {userId} = ctx;
+        
+    
+        const file = await db.file.findFirst({
+            where:{
+                id: input.id,
+                userId,
+            }
+        })
+
+        if(!file) throw new TRPCError({code: "NOT_FOUND"})
+
+        await db.file.delete({
+            where:{
+                id: input.id
+            }
+        })
     })
 })
 
 export type AppRouter = typeof appRouter
+

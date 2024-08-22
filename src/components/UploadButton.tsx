@@ -1,22 +1,21 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import { Button, buttonVariants } from "./ui/button";
 import { useState } from "react";
+import Uploader from "./Uploader";
 
 const UploadButton = () => {
   const [open, setIsOpen] = useState<boolean>(false);
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(b) => {
+        setIsOpen(b);
+      }}
+    >
       <DialogTrigger onClick={() => setIsOpen(true)} asChild>
         <Button
           className={buttonVariants({
@@ -27,7 +26,9 @@ const UploadButton = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>This is me. Who are you?</DialogContent>
+      <DialogContent>
+        <Uploader />
+      </DialogContent>
     </Dialog>
   );
 };
