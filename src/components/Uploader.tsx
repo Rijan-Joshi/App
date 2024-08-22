@@ -1,5 +1,4 @@
 "use client";
-<<<<<<< HEAD
 import { File, Loader2, Upload } from "lucide-react";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
@@ -8,17 +7,10 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "./ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
-=======
-import { File, Upload } from "lucide-react";
-import { useState } from "react";
-import Dropzone from "react-dropzone";
-import { Progress } from "@/components/ui/progress";
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
 
 const Uploader = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-<<<<<<< HEAD
   const router = useRouter();
 
   const { startUpload } = useUploadThing("documentUploader");
@@ -38,13 +30,6 @@ const Uploader = () => {
     setUploadProgress(0);
 
     const interval = setInterval(() => {
-=======
-
-  const startSimulatingProgress = () => {
-    setUploadProgress(0);
-
-    const interval = setTimeout(() => {
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
       setUploadProgress((prev) => {
         if (prev == 90) {
           clearInterval(interval);
@@ -60,16 +45,11 @@ const Uploader = () => {
   return (
     <Dropzone
       multiple={false}
-<<<<<<< HEAD
       onDrop={async (acceptedFile) => {
-=======
-      onDrop={(acceptedFiles) => {
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
         setIsUploading(true);
 
         const progressInterval = startSimulatingProgress();
 
-<<<<<<< HEAD
         const response = await startUpload(acceptedFile);
 
         console.log("Response testing", response);
@@ -100,10 +80,6 @@ const Uploader = () => {
         clearInterval(progressInterval);
         setUploadProgress(100);
         beginPolling({ key });
-=======
-        clearInterval(progressInterval);
-        setUploadProgress(100);
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -130,25 +106,17 @@ const Uploader = () => {
                 </div>
               ) : null}
 
-<<<<<<< HEAD
               {isUploading && uploadProgress < 100 ? (
-=======
-              {isUploading && (
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
                 <Progress
                   value={uploadProgress}
                   className="mt-2 text-blue-600"
                 />
-<<<<<<< HEAD
               ) : uploadProgress === 100 ? (
                 <div className="flex items-center justify-center text-align">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   Redirecting...
                 </div>
               ) : null}
-=======
-              )}
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
 
               <input
                 type="file"

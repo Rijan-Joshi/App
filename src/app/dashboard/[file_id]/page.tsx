@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { db } from "@/db";
 import { redirect, notFound } from "next/navigation";
 import PdfViewer from "@/components/PdfViewer";
@@ -6,17 +5,13 @@ import ChatBox from "@/components/ChatBox";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 const Page = async ({
-=======
-const Page = ({
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
-  params,
+  params
 }: {
   params: {
     file_id: String;
   };
 }) => {
   const { file_id } = params;
-<<<<<<< HEAD
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -52,10 +47,7 @@ const Page = ({
       </div>
     </main>
   );
-=======
 
-  return <h1>What is this place? Oh, it's {file_id}</h1>;
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
 };
 
 export default Page;

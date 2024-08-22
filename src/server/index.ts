@@ -5,17 +5,9 @@ import { db } from "@/db";
 import {z} from "zod"
 
 export const appRouter = router({
-<<<<<<< HEAD
-    authCallback: publicProcedure.query(async () => {
-      const { getUser } = getKindeServerSession()
-      const user = await getUser();
-=======
-
-    
     authCallback: publicProcedure.query(async()=> {
         const {getUser} = getKindeServerSession()
         const user = await getUser()
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
 
         if (!user || !user.id)
           throw new TRPCError({ code: 'UNAUTHORIZED' });
@@ -53,7 +45,6 @@ export const appRouter = router({
         })
 
     }),
-<<<<<<< HEAD
     getFile: privateProcedure
             .input(z.object({key: z.string()}))
             .mutation(async({ctx, input})=>{
@@ -71,8 +62,6 @@ export const appRouter = router({
         return file
     })
     ,
-=======
->>>>>>> 1d0f16f63dd262c4d6d69bcbdcdb2d15dd756420
     deleteFile: privateProcedure.input(
         z.object({id: z.string()})
     ).mutation( async({ctx, input})=>{
