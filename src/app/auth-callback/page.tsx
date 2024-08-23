@@ -13,7 +13,7 @@ const Page = () => {
     retry: 4,
     retryDelay: 200,
   });
-  if (data?.success) {
+  if (data.success) {
     router.push(`/${origin}`);
   }
   if (error) {
