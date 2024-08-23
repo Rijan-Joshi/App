@@ -5,7 +5,7 @@ import ChatBox from "@/components/ChatBox";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 const Page = async ({
-  params
+  params,
 }: {
   params: {
     file_id: String;
@@ -34,20 +34,21 @@ const Page = async ({
   }
 
   return (
-    <main className="flex justify-center gap-2 items-center h-[calc(1000vh-3.5rem]">
-      <div className="mx-auto w-full max-w-8xl grow lg: flex xl:px-2">
+    <main className="flex justify-between flex-1 flex-col items-center h-[calc(1000vh-3.5rem]">
+      <div className="mx-auto w-full max-w-8xl grow lg:flex xl:px-2">
+        {/* Left sidebar & main wrapper */}
         <div className="flex-1 xl:flex">
-          <div className="px-4 py-5 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
-            <PdfViewer url={file.url} />
+          <div className="px-4 py-6 sm:px-6 lg:pl-8 xl:flex-1 xl:pl-6">
+            <PdfViewer url={file.url} name={file.name} />
           </div>
         </div>
-      </div>
-      <div className="shrink-0 flex-[0.75] border-t border-gray-200 lg:w-96 lg:border-1 lg:border-t-0">
-        <ChatBox />
+
+        <div className="shrink-0 flex-[0.75] border-t border-gray-200 lg:w-96 lg:border-1 lg:border-t-0">
+          <ChatBox />
+        </div>
       </div>
     </main>
   );
-
 };
 
 export default Page;
