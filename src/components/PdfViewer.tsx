@@ -183,8 +183,8 @@ const PdfViewer = ({ url, name }: PdfProps) => {
           <FullScreenMode url={url} />
         </div>
       </div>
-      <div className="max-h-screen w-full flex-1">
-        <SimpleBar autoHide={false} className="max-h-[calc(100vh - 10rem]">
+      <div className="w-full flex-1">
+        <SimpleBar autoHide={false} className="max-h-[calc(100vh - 10rem)]">
           <div ref={ref}>
             <Document
               file={url}

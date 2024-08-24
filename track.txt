@@ -1,0 +1,8 @@
+1. Create the Message Section
+    a. Handle the uploadStatus
+    b. Put the status as Pending if the file is not found
+    c. Return the fileUploadStatus if the file is found
+    d. Use trpc to access these status
+    e. Apply the polling technique for refeching until the status is failed or sucess 
+    f. Make use of the routes and queries for taking the loading boolean value and keep the loading state in the chatBox
+    g. Give the feel of chatbox though the status is loading
