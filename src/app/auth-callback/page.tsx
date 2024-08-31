@@ -16,7 +16,7 @@ const Page = () => {
   if (data?.success === true) {
     router.push(`/${origin}`);
   }
-  if (error) {
+  if (error?.data?.code === "UNAUTHORIZED") {
     router.push("/sign-in");
   }
 
