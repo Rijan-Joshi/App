@@ -3,4 +3,6 @@
     "editor.fontLigatures": "'calt', 'ss01'",
     "editor.fontVariations": false,
     "editor.fontSize": 15,
+    "pieces.cloudCapabilities": "Blended",
+    "pieces.telemetry": true,
 }
