@@ -1,5 +1,4 @@
 "use client";
-import { trpc } from "@/app/_trpc/client";
 import UploadButton from "./UploadButton";
 import { Ghost } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
@@ -7,7 +6,8 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { Plus, MessageSquare, Trash, Loader2 } from "lucide-react";
 import { format } from "date-fns";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
+import { useFiles } from "@/hooks/useFiles";
 
 const Header = () => {
   return (
@@ -113,34 +113,14 @@ const EmptyState = () => {
 };
 
 const Dashboard = () => {
-  const [fileToBeDeleted, setFileToBeDeleted] = useState<string | null>(null);
-
-  const utils = trpc.useUtils();
   const {
-    data: files,
+    files,
     isLoading,
     isError,
     error,
-  } = trpc.getUserFiles.useQuery();
-
-  const { mutate: deleteFile } = trpc.deleteFile.useMutation({
-    onSuccess: () => {
-      utils.getUserFiles.invalidate();
-    },
-    onMutate({ id }) {
-      setFileToBeDeleted(id);
-    },
-    onError: (error) => {
-      console.error("Error deleting file:", error);
-    },
-    onSettled() {
-      setFileToBeDeleted(null);
-    },
-  });
-
-  const handleDeleteFile = (id: string) => {
-    deleteFile({ id });
-  };
+    fileToBeDeleted,
+    handleDeleteFile,
+  } = useFiles();
 
   return (
     <main className="mx-auto max-w-7xl md:p-10">
@@ -151,7 +131,7 @@ const Dashboard = () => {
         <Skeleton height={50} className="my-3" count={8} />
       ) : isError ? (
         <div className="text-red-500">
-          Failed to load files: {error.message}
+          Failed to load files: {error?.message}
         </div>
       ) : files && files.length > 0 ? (
         <FileList

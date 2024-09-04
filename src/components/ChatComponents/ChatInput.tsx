@@ -67,6 +67,3 @@ const ChatInput = ({ isDisabled }: ChatInputProps) => {
 };
 
 export default ChatInput;
-<div className="absolute bottom-0 left-0 w-full">
-  <div className="flex flex-row "></div>
-</div>;

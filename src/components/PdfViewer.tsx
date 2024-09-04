@@ -7,7 +7,7 @@ import { useToast } from "./ui/use-toast";
 import { useResizeDetector } from "react-resize-detector";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,6 +79,20 @@ const PdfViewer = ({ url, name }: PdfProps) => {
     setValue("zoomValue", `${zoomPercentage}%`);
   };
 
+  const handlePageChange = useCallback(
+    (direction: "prev" | "next") => {
+      setCurrentPageNum((prev) => {
+        const newPage =
+          direction === "next"
+            ? Math.min(prev + 1, numPages ?? prev)
+            : Math.max(1, prev - 1);
+        setValue("pageNum", String(newPage));
+        return newPage;
+      });
+    },
+    [setValue, numPages]
+  );
+
   return (
     <div className="max-w-full flex flex-col rounded-md shadow items-center">
       <div className="w-full border border-b h-15 flex items-center justify-between px-2">
@@ -88,13 +102,7 @@ const PdfViewer = ({ url, name }: PdfProps) => {
             <Button
               aria-label="previous-page"
               variant="ghost"
-              onClick={() => {
-                setCurrentPageNum((prev) => {
-                  const newPage = Math.max(prev - 1, 1);
-                  setValue("pageNum", String(newPage));
-                  return newPage;
-                });
-              }}
+              onClick={() => handlePageChange("prev")}
               disabled={currentPageNum <= 1}
             >
               <ChevronDown className="w-4 h-4 text-black" />
@@ -113,13 +121,7 @@ const PdfViewer = ({ url, name }: PdfProps) => {
             <Button
               aria-label="next-page"
               variant="ghost"
-              onClick={() => {
-                setCurrentPageNum((prev) => {
-                  const newPage = Math.min(prev + 1, numPages ?? prev);
-                  setValue("pageNum", String(newPage));
-                  return newPage;
-                });
-              }}
+              onClick={() => handlePageChange("next")}
               disabled={currentPageNum === numPages || numPages === undefined}
             >
               <ChevronUp className="w-4 h-4" />
