@@ -1,6 +1,6 @@
 "use client";
 import { File, Loader2, Upload } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Dropzone from "react-dropzone";
 import { Progress } from "@/components/ui/progress";
 import { useUploadThing } from "@/lib/uploadthing";
@@ -8,14 +8,35 @@ import { useToast } from "./ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
 
+interface UploadState {
+  isUploading: boolean;
+  uploadProgress: number;
+}
+
 const Uploader = () => {
-  const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadState, setUploadState] = useState<UploadState>({
+    isUploading: false,
+    uploadProgress: 0,
+  });
+
   const router = useRouter();
 
   const { startUpload } = useUploadThing("documentUploader");
   const { toast } = useToast();
 
+  //Handle Errors while Uploading
+
+  const handleUploadError = useCallback(
+    (message: string) => {
+      setUploadState({ isUploading: false, uploadProgress: 0 });
+      toast: ({
+        title: "Upload Failed",
+        description: message,
+        variant: "destructive",
+      });
+    },
+    [toast]
+  );
   //Function used for polling
   const { mutate: beginPolling } = trpc.getFile.useMutation({
     onSuccess: (file) => {
@@ -26,62 +47,50 @@ const Uploader = () => {
   });
 
   // Simulating Progress becuase the progress can't be tracked using tRPC
-  const startSimulatingProgress = () => {
-    setUploadProgress(0);
+  const startSimulatingProgress = useCallback(() => {
+    setUploadState((prev) => ({ ...prev, uploadProgress: 0 }));
 
     const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev == 90) {
+      setUploadState((prev) => {
+        if (prev.uploadProgress >= 90) {
           clearInterval(interval);
           return prev;
         }
-        return prev + 5;
+        return { ...prev, uploadProgress: prev.uploadProgress - 5 };
       });
     }, 300);
 
     return interval;
+  }, []);
+
+  const handleDrop = async (files: File[]) => {
+    setUploadState({ isUploading: true, uploadProgress: 0 });
+
+    //Start of simulation
+    const uploadSimulation = startSimulatingProgress();
+    //Start Uploading
+    const res = await startUpload(files);
+
+    if (!res || !res.length) {
+      clearInterval(uploadSimulation);
+      return handleUploadError("Something went wrong.");
+    }
+
+    const [fileResponse] = res;
+    const key = fileResponse?.key;
+
+    if (!key) {
+      clearInterval(uploadSimulation);
+      return handleUploadError("Something went wrong");
+    }
+
+    clearInterval(uploadSimulation);
+    setUploadState({ isUploading: false, uploadProgress: 100 });
+    beginPolling({ key });
   };
 
   return (
-    <Dropzone
-      multiple={false}
-      onDrop={async (acceptedFile) => {
-        setIsUploading(true);
-
-        const progressInterval = startSimulatingProgress();
-
-        const response = await startUpload(acceptedFile);
-
-        console.log("Response testing", response);
-
-        if (!response || response.length === 0) {
-          clearInterval(progressInterval);
-          setIsUploading(false);
-          return toast({
-            title: "SOMETHING WENT WRONG",
-            description: "Try again",
-            variant: "destructive",
-          });
-        }
-
-        const [fileResponse] = response;
-        const key = fileResponse?.key;
-
-        if (!key) {
-          clearInterval(progressInterval);
-          setIsUploading(false);
-          return toast({
-            title: "SOMETHING WENT WRONG...",
-            description: "Please try again later",
-            variant: "destructive",
-          });
-        }
-
-        clearInterval(progressInterval);
-        setUploadProgress(100);
-        beginPolling({ key });
-      }}
-    >
+    <Dropzone multiple={false} onDrop={handleDrop}>
       {({ getRootProps, getInputProps, acceptedFiles }) => (
         <div
           {...getRootProps()}
@@ -106,12 +115,12 @@ const Uploader = () => {
                 </div>
               ) : null}
 
-              {isUploading && uploadProgress < 100 ? (
+              {uploadState.isUploading && uploadState.uploadProgress < 100 ? (
                 <Progress
-                  value={uploadProgress}
+                  value={uploadState.uploadProgress}
                   className="mt-2 text-blue-600"
                 />
-              ) : uploadProgress === 100 ? (
+              ) : uploadState.uploadProgress === 100 ? (
                 <div className="flex items-center justify-center text-align">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   Redirecting...

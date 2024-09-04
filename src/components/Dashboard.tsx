@@ -122,6 +122,7 @@ const Dashboard = () => {
     isError,
     error,
   } = trpc.getUserFiles.useQuery();
+
   const { mutate: deleteFile } = trpc.deleteFile.useMutation({
     onSuccess: () => {
       utils.getUserFiles.invalidate();
