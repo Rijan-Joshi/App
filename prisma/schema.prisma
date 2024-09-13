@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Making User Database
 model User {
   id                     String    @id @unique
   email                  String    @unique
@@ -17,6 +18,7 @@ model User {
   File                   File[]
 }
 
+//Making File schema for storing files
 model File {
   id           String       @id @default(cuid())
   name         String
@@ -36,3 +38,5 @@ enum uploadStatus {
   FAILED
   SUCCESS
 }
+
+//Schema for messages and responses for interacting with Pdf
