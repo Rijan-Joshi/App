@@ -16,6 +16,7 @@ model User {
   stripePriceId          String?   @map("stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map("stripe_current_period_end")
   File                   File[]
+  Message                Message[]
 }
 
 //Making File schema for storing files
@@ -27,6 +28,8 @@ model File {
   key          String
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+
+  Message Message[]
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
@@ -40,3 +43,20 @@ enum uploadStatus {
 }
 
 //Schema for messages and responses for interacting with Pdf
+model Message {
+  id      String @id @default(cuid())
+  content String @db.Text()
+  role    Role
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  File      File?    @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  fileId    String?
+}
+
+enum Role {
+  ASSISTANT
+  USER
+}
